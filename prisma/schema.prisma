@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @db.Uuid @default(uuid()) @id
+  email     String   @db.VarChar(100) @unique
+  password  String   @db.VarChar(255)
+  firstName String   @db.VarChar(100) @map("first_name")
+  lastName  String   @db.VarChar(100) @map("last_name")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+  token     Token?
+
+  @@map("users")
+}
+
+model Token {
+  id         String   @db.Uuid @default(uuid()) @id
+  expiresdAt DateTime @map("expires_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @map("updated_at")
+  userId     String   @db.Uuid @unique @map("user_id")
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@map("tokens")
+}
+
+model Author {
+  id        Int      @default(autoincrement()) @id
+  name      String   @db.VarChar(100)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+  quotes    Quote[]
+
+  @@map("authors")
+}
+
+model Quote {
+  id        Int      @default(autoincrement()) @id
+  quote     String   @db.VarChar(1000)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+  authorId  Int      @map("author_id")
+  author    Author   @relation(fields: [authorId], references: [id])
+
+  @@map("quotes")
+}
