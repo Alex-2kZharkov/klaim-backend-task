@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { CompanyInfo } from './company.types';
 
 @Injectable()
 export class CompanyService {
-  getInfo(): string {
-    return 'Some information about the <b>company</b>.';
+  getInfo(): CompanyInfo {
+    return { info: 'Some information about the <b>company</b>.' };
   }
 }
