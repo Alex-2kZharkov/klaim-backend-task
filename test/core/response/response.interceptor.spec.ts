@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import { ExecutionContext } from '@nestjs/common';
-import { ResponseInterceptor } from './response.interceptor';
 import { of, Observable } from 'rxjs';
 
-import { ResponseType } from './response.type';
+import { ResponseInterceptor } from '../../../src/core/response';
+import { ResponseType } from '../../../src/core/response';
 
 describe('ResponseInterceptor', () => {
   let interceptor: ResponseInterceptor<string>;

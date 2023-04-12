@@ -1,6 +1,6 @@
 {
   "name": "klaim-backend-task",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Backend part as part of the assigment from Klaim",
   "author": "Aleksandr Zharkov",
   "private": true,
