@@ -11,6 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableVersioning();
+  app.enableCors({ origin: APPLICATION_CONFIG.ORIGIN });
   app.use(expressSession());
   app.use(passport.initialize());
   app.use(passport.session());
