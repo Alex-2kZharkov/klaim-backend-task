@@ -11,7 +11,7 @@ export class AuthService {
   async registerUser({ email, password, fullname }: RegisterUserDto): Promise<object> {
     return await this.userService.saveUser({
       email,
-      password: this.hashPassword(password, this.generateSalt()),
+      password: this.hashPassword(password),
       ...this.userService.parseFullname(fullname, ' '),
     });
   }
@@ -20,9 +20,9 @@ export class AuthService {
     return crypto.randomBytes(16).toString('hex');
   }
 
-  hashPassword(password: string, salt: string): string {
+  hashPassword(password: string): string {
     const hash = crypto.createHash('sha256');
-    hash.update(password + salt);
+    hash.update(password + this.generateSalt());
     return hash.digest('hex');
   }
 }
