@@ -18,18 +18,17 @@ model User {
   lastName  String   @db.VarChar(100) @map("last_name")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
-  token     Token?
 
   @@map("users")
 }
 
 model Token {
-  id         String   @db.Uuid @default(uuid()) @id
-  expiresdAt DateTime @map("expires_at")
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @default(now()) @map("updated_at")
-  userId     String   @db.Uuid @unique @map("user_id")
-  user       User     @relation(fields: [userId], references: [id])
+  id        Int      @default(autoincrement()) @id
+  sid       String   @unique
+  sess      Json
+  expire    DateTime @db.Timestamp(6)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
 
   @@map("tokens")
 }

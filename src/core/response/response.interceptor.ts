@@ -15,7 +15,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, ResponseType<T
     return next.handle().pipe(
       map(data => ({
         success: this.isSuccessfulResponse(context),
-        data,
+        data: data ?? {},
       })),
     );
   }

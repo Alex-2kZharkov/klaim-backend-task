@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import * as crypto from 'crypto';
+import * as bcrypt from 'bcrypt';
 
 import { RegisterUserDto } from './auth.dto';
 import { UserService } from '../user';
@@ -8,21 +8,23 @@ import { UserService } from '../user';
 export class AuthService {
   constructor(private userService: UserService) {}
 
-  async registerUser({ email, password, fullname }: RegisterUserDto): Promise<object> {
+  async registerUser({ email, password, fullname }: RegisterUserDto): Promise<void> {
+    const hashPassword = await bcrypt.hash(password, 10);
     return await this.userService.saveUser({
       email,
-      password: this.hashPassword(password),
+      password: hashPassword,
       ...this.userService.parseFullname(fullname, ' '),
     });
   }
 
-  generateSalt(): string {
-    return crypto.randomBytes(16).toString('hex');
-  }
+  async validateUser(email: string, password: string) {
+    const user = await this.userService.findByEmail(email);
+    const doesPasswordMatch = await bcrypt.compare(password, user?.password ?? '');
 
-  hashPassword(password: string): string {
-    const hash = crypto.createHash('sha256');
-    hash.update(password + this.generateSalt());
-    return hash.digest('hex');
+    if (doesPasswordMatch) {
+      return { ...user, password: null };
+    }
+
+    return null;
   }
 }
