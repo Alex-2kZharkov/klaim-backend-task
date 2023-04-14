@@ -9,7 +9,7 @@ export class PrismaService {
     this.client = new PrismaClient();
   }
 
-  async onModuleDestroy() {
+  async onModuleDestroy(): Promise<void> {
     await this.client.$disconnect();
   }
 }

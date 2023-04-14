@@ -8,6 +8,7 @@ import { UserService } from './user.service';
 @Controller({ version: '1' })
 export class UserController {
   constructor(private userService: UserService) {}
+
   @Get('profile')
   @UseGuards(AuthenticationGuard)
   async getProfile(

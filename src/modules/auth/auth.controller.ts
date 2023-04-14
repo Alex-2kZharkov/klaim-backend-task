@@ -4,6 +4,7 @@ import { RegisterUserDto } from './auth.dto';
 import { AuthService } from './auth.service';
 import { AuthenticatedRequest } from '../../core/request';
 import { AuthenticationGuard, LocalAuthenticationGuard } from '../../core/guard';
+import { EXPIRED_SESSION_VALUE } from '../../constants';
 
 @Controller({
   version: '1',
@@ -13,7 +14,7 @@ export class AuthController {
 
   @Post('/register')
   async registerUser(@Body() registerUserDto: RegisterUserDto): Promise<void> {
-    return await this.authService.registerUser(registerUserDto);
+    await this.authService.registerUser(registerUserDto);
   }
 
   @HttpCode(200)
@@ -27,6 +28,6 @@ export class AuthController {
   @UseGuards(AuthenticationGuard)
   async logout(@Request() request: AuthenticatedRequest): Promise<void> {
     request.logOut(() => console.log('Session has been terminated'));
-    request.session.cookie.maxAge = 0;
+    request.session.cookie.maxAge = EXPIRED_SESSION_VALUE;
   }
 }
