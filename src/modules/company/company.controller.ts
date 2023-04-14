@@ -1,4 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
+
 import { CompanyService } from './company.service';
 import { CompanyInfo } from './company.types';
 
