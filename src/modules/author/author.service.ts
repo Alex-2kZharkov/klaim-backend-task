@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
 import { setTimeout } from 'node:timers/promises';
+import { Injectable } from '@nestjs/common';
+import { Author as AuthorEntity } from '@prisma/client';
 
 import { PrismaService } from '../../database';
-import { Author as AuthorEntity } from '@prisma/client';
 import { Author } from './author.types';
 import { RandomService } from '../../services';
 
@@ -12,24 +12,24 @@ export class AuthorService {
   constructor(private prismaService: PrismaService, private randomService: RandomService) {}
 
   async getRandomAuthorAfterDelay(delay: number): Promise<Author> {
-    const startTime = Date.now();
-    const author = await this.getRandomAuthor();
-    return await setTimeout(delay - (Date.now() - startTime), author);
+    const [author] = await Promise.all([this.getRandomAuthor(), setTimeout(delay)]);
+    return author;
   }
 
   async getRandomAuthor(): Promise<Author> {
-    const authorsCount = await this.countAuthors();
-    const { id: authorId, name } = await this.findOne(
-      this.randomService.getRandomNumber(this.leastRandomAuthorRange, authorsCount),
-    );
+    const { id: authorId, name } = await this.findOneRandom();
     return { authorId, name };
   }
 
-  async countAuthors(): Promise<number> {
-    return await this.prismaService.client.author.count();
+  async findOneRandom(): Promise<AuthorEntity> {
+    return this.prismaService.client.author.findFirst({ skip: await this.countRandomAuthorSkip() });
   }
 
-  async findOne(skip: number): Promise<AuthorEntity> {
-    return this.prismaService.client.author.findFirst({ skip: skip - this.leastRandomAuthorRange });
+  async countRandomAuthorSkip(): Promise<number> {
+    const authorCount = await this.prismaService.client.author.count();
+    return (
+      this.randomService.getRandomNumber(this.leastRandomAuthorRange, authorCount) -
+      this.leastRandomAuthorRange
+    );
   }
 }
