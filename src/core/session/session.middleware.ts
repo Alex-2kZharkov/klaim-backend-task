@@ -1,3 +1,4 @@
+import { RequestHandler } from '@nestjs/common/interfaces';
 import * as session from 'express-session';
 import * as connectPgSimple from 'connect-pg-simple';
 import { Pool } from 'pg';
@@ -10,7 +11,7 @@ const pgPool = new Pool({
 });
 const pgSession = connectPgSimple(session);
 
-export const expressSession = () => {
+export const expressSession = (): RequestHandler => {
   return session({
     store: new pgSession({
       pool: pgPool,

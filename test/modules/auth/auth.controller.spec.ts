@@ -12,13 +12,14 @@ import { LocalStrategy } from '../../../src/modules/auth/auth.local.strategy';
 import { AuthenticationGuard } from '../../../src/core/guard';
 
 describe('AuthController', () => {
+  let app: INestApplication;
+  let userService: UserService;
+  let localStrategy: LocalStrategy;
+
   const loginData = {
     email: 'test@gmail.com',
     password: 'password123',
   };
-  let app: INestApplication;
-  let userService: UserService;
-  let localStrategy: LocalStrategy;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -27,6 +28,7 @@ describe('AuthController', () => {
 
     app = moduleFixture.createNestApplication();
     applyMiddlewares(app);
+
     await app.init();
 
     userService = app.get<UserService>(UserService);
