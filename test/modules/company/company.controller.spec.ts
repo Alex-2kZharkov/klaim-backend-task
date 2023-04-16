@@ -4,8 +4,8 @@ import * as request from 'supertest';
 
 import { expect } from 'chai';
 
-import { CompanyModule } from '../../../../src/modules/company';
-import { ResponseInterceptor } from '../../../../src/core/response';
+import { CompanyModule } from '../../../src/modules/company';
+import { ResponseInterceptor } from '../../../src/core/response';
 
 describe('CompanyController', () => {
   let app: INestApplication;
@@ -20,18 +20,17 @@ describe('CompanyController', () => {
     await app.init();
   });
 
-  it('/info GET', () => {
-    return request(app.getHttpServer())
+  it('/info GET', async () => {
+    const response = await request(app.getHttpServer())
       .get('/info')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .then(response => {
-        expect(response.body).to.deep.equals({
-          success: true,
-          data: {
-            info: 'Some information about the <b>company</b>.',
-          },
-        });
-      });
+      .expect('Content-Type', /json/);
+
+    expect(response.body).to.deep.equals({
+      success: true,
+      data: {
+        info: 'Some information about the <b>company</b>.',
+      },
+    });
   });
 });
