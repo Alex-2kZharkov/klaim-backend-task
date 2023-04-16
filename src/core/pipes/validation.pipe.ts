@@ -4,7 +4,7 @@ export class ParseIntPipe implements PipeTransform<string, number> {
   transform(queryString: string): number | undefined {
     const intValue = parseInt(queryString, 10);
     if (queryString === undefined) {
-      return undefined;
+      return;
     }
 
     if (Number.isNaN(intValue)) {
