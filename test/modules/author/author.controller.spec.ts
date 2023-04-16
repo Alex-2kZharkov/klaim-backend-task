@@ -41,6 +41,7 @@ describe('AuthorController', () => {
       expect(response.body.success).to.be.true;
       expect(response.body.data).to.deep.equal({ authorId: 1, name: 'John Doe' });
       expect(getRandomAuthorStub.calledOnce).to.be.true;
+      expect(getRandomAuthorStub.calledWith(5000)).to.be.true;
 
       canActivateStub.restore();
     });
