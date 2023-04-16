@@ -3,10 +3,11 @@ import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PrismaService {
-  client: PrismaClient;
+  private static readonly prisma = new PrismaClient();
+  public client: PrismaClient;
 
   constructor() {
-    this.client = new PrismaClient();
+    this.client = PrismaService.prisma;
   }
 
   async onModuleDestroy(): Promise<void> {
