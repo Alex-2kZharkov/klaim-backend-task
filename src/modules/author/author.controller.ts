@@ -1,5 +1,4 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { setTimeout } from 'node:timers/promises';
 
 import { AuthenticationGuard } from '../../core/guard';
 import { FIVE_SECONDS_DELAY } from '../../constants';
@@ -13,7 +12,6 @@ export class AuthorController {
   @Get('/author')
   @UseGuards(AuthenticationGuard)
   async getRandomAuthor(): Promise<Author> {
-    const author = await this.authorService.getRandomAuthor();
-    return await setTimeout(FIVE_SECONDS_DELAY, author);
+    return await this.authorService.getRandomAuthorAfterDelay(FIVE_SECONDS_DELAY);
   }
 }
