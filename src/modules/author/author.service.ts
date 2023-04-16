@@ -1,17 +1,15 @@
-// noinspection ES6RedundantAwait
-
 import { Injectable } from '@nestjs/common';
 import { setTimeout } from 'node:timers/promises';
 
 import { PrismaService } from '../../database';
 import { Author as AuthorEntity } from '@prisma/client';
-import { getRandomNumber } from '../../utils';
-import { Author } from './author';
+import { Author } from './author.types';
+import { RandomService } from '../../services';
 
 @Injectable()
 export class AuthorService {
   private leastRandomAuthorRange = 1;
-  constructor(private prismaService: PrismaService) {}
+  constructor(private prismaService: PrismaService, private randomService: RandomService) {}
 
   async getRandomAuthorAfterDelay(delay: number): Promise<Author> {
     const startTime = Date.now();
@@ -22,7 +20,7 @@ export class AuthorService {
   async getRandomAuthor(): Promise<Author> {
     const authorsCount = await this.countAuthors();
     const { id: authorId, name } = await this.findOne(
-      getRandomNumber(this.leastRandomAuthorRange, authorsCount),
+      this.randomService.getRandomNumber(this.leastRandomAuthorRange, authorsCount),
     );
     return { authorId, name };
   }
