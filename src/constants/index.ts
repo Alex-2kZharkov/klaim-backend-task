@@ -1,1 +1,3 @@
 export const ONE_MINUTE_IN_MILLISECONDS = 60 * 1000;
+export const EXPIRED_SESSION_VALUE = 0;
+export const FIVE_SECONDS_DELAY = 5000;

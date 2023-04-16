@@ -2,7 +2,7 @@ import { Catch, ExceptionFilter, ArgumentsHost, HttpException, HttpStatus } from
 
 @Catch()
 export class ResponseExceptionFilter implements ExceptionFilter {
-  catch(exception: any, host: ArgumentsHost) {
+  catch(exception: any, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const status =
