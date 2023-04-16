@@ -22,7 +22,7 @@ describe('UserController', () => {
   });
 
   describe('/profile GET', () => {
-    it('should return user profile when user is authenticated', async () => {
+    it('should throw forbidden error with 403 code when user is not authenticated', async () => {
       const response = await request.agent(app.getHttpServer()).get('/profile').expect(403);
 
       expect(response.body.success).to.be.false;
