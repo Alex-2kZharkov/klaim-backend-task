@@ -14,3 +14,7 @@ logs
 
 # env
 .env
+
+# certificates
+cert.pem
+key.pem

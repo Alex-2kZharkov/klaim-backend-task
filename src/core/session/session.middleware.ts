@@ -18,7 +18,7 @@ export const expressSession = (): RequestHandler => {
       tableName: 'tokens',
     }),
     secret: APPLICATION_CONFIG.SESSION_SECRET,
-    cookie: { maxAge: ONE_MINUTE_IN_MILLISECONDS },
+    cookie: { maxAge: ONE_MINUTE_IN_MILLISECONDS, sameSite: 'none', secure: true },
     resave: false,
     saveUninitialized: false,
   });
